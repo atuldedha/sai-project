@@ -1,7 +1,18 @@
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">BrainJEE project</header>
+    <div className="">
+      {/* header section */}
+      <section>
+        <Header />
+      </section>
+
+      {/* hero section */}
+      <section>
+        <Hero />
+      </section>
     </div>
   );
 }
