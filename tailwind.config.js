@@ -19,14 +19,20 @@ module.exports = {
         blue6: "#2A2947",
         blue7: "#2169D0",
         blue8: "#121C34",
+        blue9: "#28243A",
+        blue10: "#2F5EDD",
+        blue11: "#0A142F",
         black1: "#040404",
         gray1: "#333333",
+        gray2: "#4D5569",
+        gray3: "#8987A1",
       },
       backgroundColor: {
         grayBg: "rgba(15, 78, 168, 0.06)",
       },
       boxShadow: {
         shadow1: "-11.8769px 35.6308px 59.3846px rgba(31, 29, 85, 0.05)",
+        shadow2: "0px 22px 54px rgba(0, 0, 0, 0.04);",
       },
       gridTemplateColumns: {
         5: "1fr 1fr 1fr 1fr 1fr",

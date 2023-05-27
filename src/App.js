@@ -1,4 +1,5 @@
 import CoursesSection from "./components/CoursesSection";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import ReviewSection from "./components/ReviewSection";
@@ -34,9 +35,13 @@ function App() {
       </section>
 
       {/* why choose us section */}
-      <section className="">
+      <section className="mb-20">
         <SpecificationSection />
       </section>
+
+      <footer className="pb-10">
+        <Footer />
+      </footer>
     </div>
   );
 }

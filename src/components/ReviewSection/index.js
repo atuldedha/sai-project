@@ -1,10 +1,30 @@
 import React from "react";
 import ReviewCard from "./ReviewCard/ReviewCard";
 import reviewData from "./staticData";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import "./reviewSection.css";
 
 const ReviewSection = () => {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1300 },
+      items: 3,
+      slidesToSlide: 3, // optional, default to 1.
+    },
+    tablet: {
+      breakpoint: { max: 1300, min: 900 },
+      items: 2,
+      slidesToSlide: 2, // optional, default to 1.
+    },
+    mobile: {
+      breakpoint: { max: 900, min: 0 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+  };
   return (
-    <div className="flex flex-col px-64 items-center">
+    <div className="flex flex-col px-16 lg:px-32 xl:px-64 items-center">
       <span className="font-manrope font-bold text-base text-blue7 mb-4 block">
         Clients say
       </span>
@@ -16,16 +36,24 @@ const ReviewSection = () => {
 
       {/* review cards */}
       {/* dummy data */}
-      <div className="w-full h-full flex items-center gap-4 overflow-scroll transition-all duration-100 ease-in-out py-10">
-        {reviewData?.map((data) => (
-          <ReviewCard
-            key={data.id}
-            message={data.reviewerMessage}
-            rating={data.reviewerRating}
-            name={data.reviewerName}
-            image={data.image}
-          />
-        ))}
+      <div className="w-full h-full">
+        <Carousel
+          showDots={true}
+          swipeable={true}
+          responsive={responsive}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          {reviewData?.map((data) => (
+            <ReviewCard
+              key={data.id}
+              message={data.reviewerMessage}
+              rating={data.reviewerRating}
+              name={data.reviewerName}
+              image={data.image}
+            />
+          ))}
+        </Carousel>
       </div>
     </div>
   );

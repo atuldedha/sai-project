@@ -5,14 +5,14 @@ import quotationMark from "../../../images/quotation_marks.svg";
 // review card component
 const ReviewCard = ({ message, name, rating, image }) => {
   return (
-    <div className="w-96 flex flex-col relative bg-white rounded-ratingCardRounded px-4 py-5">
+    <div className="flex flex-col relative bg-white rounded-ratingCardRounded px-4 py-5 ml-4">
       {/* quotation mark image */}
       <img
         src={quotationMark}
         alt="marks"
         className="absolute -top-5 right-5"
       />
-      <div className="w-96 px-10 py-5">
+      <div className="px-10 py-5">
         {/* reveiw message */}
         <p className="text-blue-8 text-sm font-normal font-montserrat mb-14">
           {message}
@@ -21,8 +21,8 @@ const ReviewCard = ({ message, name, rating, image }) => {
         <div className="flex flex-col items-start">
           {/* ratings */}
           <div className="flex items-center space-x-4 mb-4">
-            {Array.from(Array(5)).map(() => (
-              <img src={EmptyStart} alt="star" />
+            {Array.from(Array(5)).map((_, i) => (
+              <img key={i} src={EmptyStart} alt="star" />
             ))}
           </div>
 
