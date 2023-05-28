@@ -24,12 +24,12 @@ const ReviewSection = () => {
     },
   };
   return (
-    <div className="flex flex-col px-16 lg:px-32 xl:px-64 items-center">
-      <span className="font-manrope font-bold text-base text-blue7 mb-4 block">
+    <div className="flex flex-col px-4 lg:px-16 xl:px-64 items-center">
+      <span className="font-manrope font-bold text-sm sm:text-base text-blue7 mb-4 block">
         Clients say
       </span>
 
-      <h1 className="font-inter font-semibold text-4xl text-center text-blue4 mb-10">
+      <h1 className="font-inter font-semibold text-xl lg:text-2xl xl:text-4xl text-center text-blue4 mb-10">
         Clophi is your Azure Resource Center with hundreds of readily{" "}
         <span className="text-blue7">deployable Azure Resources</span>
       </h1>

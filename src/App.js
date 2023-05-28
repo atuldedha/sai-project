@@ -8,38 +8,39 @@ import SubjectSection from "./components/SubjectSection";
 
 function App() {
   return (
-    <div className="bg-background1 bg-opacity-75">
-      {/* header section */}
-      <section>
-        <Header />
-      </section>
+    <div className="bg-bgColor2">
+      <div className="bg-bgColor1 rounded-bl-curveRadius rounded-br-curveRadius">
+        {/* header section */}
+        <section>
+          <Header />
+        </section>
 
-      {/* hero section */}
-      <section className="mb-10">
-        <Hero />
-      </section>
+        {/* hero section */}
+        <section className="mb-8 lg:mb-32">
+          <Hero />
+        </section>
 
-      {/* hero section */}
-      <section className="mb-10">
-        <SubjectSection subjectTitle="Science" />
-      </section>
+        {/* hero section */}
+        <section className="mb-32">
+          <SubjectSection subjectTitle="Science" />
+        </section>
 
-      {/* review section */}
-      <section className="mb-10">
-        <ReviewSection />
-      </section>
+        {/* review section */}
+        <section className="mb-8 lg:mb-32">
+          <ReviewSection />
+        </section>
 
-      {/* courses section */}
-      <section className="mb-10">
-        <CoursesSection />
-      </section>
-
+        {/* courses section */}
+        <section className="lg:mb-20 pb-20 mb-4">
+          <CoursesSection />
+        </section>
+      </div>
       {/* why choose us section */}
-      <section className="mb-20">
+      <section className="pb-8 lg:pb-32">
         <SpecificationSection />
       </section>
 
-      <footer className="pb-10">
+      <footer className="pb-8 lg:pb-32">
         <Footer />
       </footer>
     </div>

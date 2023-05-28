@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      screens: {
+        xl: "1400px",
+      },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
@@ -11,6 +14,8 @@ module.exports = {
         manrope: ["Manrope", "sans-serif"],
       },
       colors: {
+        bgColor1: "#e9effb",
+        bgColor2: "#F5F5F5",
         blue1: "#172E51",
         blue2: "#1F2833",
         blue3: "#152E51",
@@ -33,6 +38,8 @@ module.exports = {
       boxShadow: {
         shadow1: "-11.8769px 35.6308px 59.3846px rgba(31, 29, 85, 0.05)",
         shadow2: "0px 22px 54px rgba(0, 0, 0, 0.04);",
+        shadow3: "14px 41px 100px rgba(41, 74, 177, 0.26)",
+        shadow4: "0px 16.0438px 32.0877px rgba(0, 59, 129, 0.080899)",
       },
       gridTemplateColumns: {
         5: "1fr 1fr 1fr 1fr 1fr",
@@ -42,6 +49,7 @@ module.exports = {
       },
       borderRadius: {
         ratingCardRounded: "112.711px 27.0507px 27.0507px 27.0507px",
+        curveRadius: "100% 3%",
       },
     },
   },

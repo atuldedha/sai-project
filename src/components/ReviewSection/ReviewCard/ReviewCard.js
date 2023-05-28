@@ -5,7 +5,7 @@ import quotationMark from "../../../images/quotation_marks.svg";
 // review card component
 const ReviewCard = ({ message, name, rating, image }) => {
   return (
-    <div className="flex flex-col relative bg-white rounded-ratingCardRounded px-4 py-5 ml-4">
+    <div className="flex flex-col relative bg-white shadow-shadow4 rounded-ratingCardRounded px-4 py-5 ml-2 lg:ml-4">
       {/* quotation mark image */}
       <img
         src={quotationMark}
