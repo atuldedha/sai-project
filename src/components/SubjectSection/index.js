@@ -26,7 +26,7 @@ const SubjectSection = ({ subjectTitle }) => {
       {/* subject suggested courses card */}
       {/* dummy data */}
       <div
-        className="w-full h-full grid grid-cols-5 gap-4 overflow-scroll transition-all duration-100 ease-in-out translate-x-2"
+        className="w-full h-full grid grid-cols-5 gap-4 overflow-x-scroll transition-all duration-100 ease-in-out translate-x-2 scrollbar-thin scrollbar-track-gray-400/20 scrollbar-thumb-blue-300/80 scrollbar-none"
         ref={cardsContainerRef}
       >
         {subjectData?.map((data) => (

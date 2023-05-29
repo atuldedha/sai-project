@@ -157,7 +157,7 @@ const Hero = () => {
 
           <form
             onSubmit={search}
-            className="flex items-center flex-grow bg-white py-2 px-4 rounded-lg lg:py-0 lg:px-0"
+            className="flex items-center flex-grow bg-white py-2 px-4 rounded-lg lg:py-0 lg:px-0 space-x-2"
           >
             {/* input */}
             <input
@@ -169,14 +169,15 @@ const Hero = () => {
             />
 
             {/* icons */}
-            <div className="flex items-center space-x-3 h-full">
+            <div className="flex items-center space-x-2 h-full">
               <img
                 src={Search}
                 alt="search"
                 className="w-5 h-5 lg:w-8 lg:h-8 object-contain cursor-pointer"
+                onClick={search}
               />
 
-              <div className="border-l-[1px] border-l-blue3 w-2 h-full" />
+              <div className="border-l-[1px] border-l-blue3 h-4" />
 
               <img
                 src={Mic}
