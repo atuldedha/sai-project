@@ -1,5 +1,6 @@
 import React from "react";
 
+// course card compoennt
 const CourseCard = ({ courseImage, courseName, noOfCourses }) => {
   return (
     <div className="bg-white px-4 py-4 rounded-lg flex items-center space-x-4">
