@@ -2,10 +2,16 @@ import React from "react";
 import Logo from "../../images/logo.svg";
 import ShuttleImage from "../../images/shuttle.png";
 import MenuIcon from "../../images/menuIcon.svg";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate("/login");
+  };
   return (
-    <div className="flex items-center px-4 lg:px-16 xl:px-64 py-9 justify-between bg-white">
+    <div className="flex items-center px-4 lg:px-16 xl:px-64 py-6 justify-between bg-white">
       {/* logo */}
 
       <div className="flex items-center space-x-2">
@@ -46,7 +52,10 @@ const Header = () => {
 
       {/* join button */}
       <div className="hidden lg:flex items-center space-x-4">
-        <span className="text-sm font-semibold font-inter text-blue2 cursor-pointer">
+        <span
+          className="text-sm font-semibold font-inter text-blue2 cursor-pointer"
+          onClick={handleNavigation}
+        >
           Log in
         </span>
         <button

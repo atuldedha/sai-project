@@ -1,49 +1,22 @@
-import CoursesSection from "./components/CoursesSection";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import ReviewSection from "./components/ReviewSection";
-import SpecificationSection from "./components/SpecificationSection";
-import SubjectSection from "./components/SubjectSection";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
-    <div className="bg-bgColor2">
-      <div className="bg-bgColor1 rounded-bl-curveRadius rounded-br-curveRadius">
-        {/* header section */}
-        <section>
-          <Header />
-        </section>
+    <Routes>
+      <Route path="/">
+        {/* "/" will go to home page */}
+        <Route index element={<Home />} />
 
-        {/* hero section */}
-        <section className="mb-8 lg:mb-32">
-          <Hero />
-        </section>
+        {/* login page route */}
+        <Route path="login" element={<Login />} />
 
-        {/* hero section */}
-        <section className="mb-32">
-          <SubjectSection subjectTitle="Science" />
-        </section>
-
-        {/* review section */}
-        <section className="mb-8 lg:mb-32">
-          <ReviewSection />
-        </section>
-
-        {/* courses section */}
-        <section className="lg:mb-20 pb-20 mb-4">
-          <CoursesSection />
-        </section>
-      </div>
-      {/* why choose us section */}
-      <section className="pb-8 lg:pb-32">
-        <SpecificationSection />
-      </section>
-
-      <footer className="pb-8 lg:pb-32">
-        <Footer />
-      </footer>
-    </div>
+        {/* signup page route */}
+        <Route path="signup" element={<Signup />} />
+      </Route>
+    </Routes>
   );
 }
 

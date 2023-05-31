@@ -5,24 +5,71 @@ import Mic from "../../images/mic.svg";
 import axios from "axios";
 
 const Hero = () => {
+  // categories
   const categories = ["Math", "Science", "Social", "English"];
+  // open category dropdown state
   const [showCategories, setShowCategories] = useState(false);
+  // search query state
   const [searchQuery, setSearchQuery] = useState("");
+  // selected category state
   const [selectedCategory, setSelectedCategory] = useState("Math");
+  // loading state
   const [loading, setLoading] = useState(false);
+  // clicked on search button or form submit state
   const [searchButtonClicked, setSearchButtonClicked] = useState(false);
+  // search error state
   const [searchError, setSearchError] = useState(null);
+  // api response cam state
   const [answerGenerated, setAnswerGenereated] = useState(false);
-  const [searchContent, setSearchContent] = useState("");
+  // formatted search text state
   const [formattedSearchContent, setFormattedSearchContent] = useState([]);
+  // image link state
+  const [serachImages, setSearchImages] = useState([]);
 
+  // Recursive function to extract plain text from the result-content element
+  const getResultContentText = (element) => {
+    let text = "";
+    const childNodes = element.childNodes;
+    for (let i = 0; i < childNodes.length; i++) {
+      const node = childNodes[i];
+      if (node.nodeType === Node.TEXT_NODE) {
+        text += node.textContent;
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== "A") {
+        text += getResultContentText(node);
+      }
+    }
+    return text;
+  };
+
+  const extractTextAndLinks = (response) => {
+    const regex = /(https?:\/\/[^\s]+)/g;
+    const links = [];
+    const text = [];
+
+    response.forEach((result) => {
+      const extractedLinks = result.match(regex);
+      if (extractedLinks) {
+        links.push(...extractedLinks);
+      }
+
+      const extractedText = result.replace(regex, "").trim();
+      const newText = extractedText.replace(/\n/g, "").trim();
+      if (extractedText) {
+        text.push(newText);
+      }
+    });
+
+    return { links, text };
+  };
+
+  // handke search
   const search = (e) => {
     e.preventDefault();
     setLoading(true);
     setSearchButtonClicked(true);
     axios
       .post(
-        `http://54.81.171.95:5000/query`,
+        `http://54.81.171.95:5010/query`,
         {
           index_name: selectedCategory,
           query: searchQuery,
@@ -35,22 +82,20 @@ const Hero = () => {
         }
       )
       .then((res) => {
+        // returning the html
         return res?.data;
       })
       .then((html) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const resultContent = doc.querySelector(".result-content");
-        if (resultContent) {
-          const content = resultContent.textContent;
+        const results = extractTextAndLinks(html?.search_results);
+        console.log(results?.text);
 
-          setFormattedSearchContent(
-            content.charAt(content.length - 1) === "."
-              ? content.slice(0, content.length - 1).split(".")
-              : content.split(".")
-          );
-          setSearchContent(content);
-        }
+        setSearchImages(results?.links);
+        setFormattedSearchContent(
+          results?.text[0].charAt(results?.text[0].length - 1) === "."
+            ? results?.text[0].slice(0, results?.text[0].length - 1).split(".")
+            : results?.text[0].split(".")
+        );
+
         setAnswerGenereated(true);
         setLoading(false);
         setSearchError(null);
@@ -62,24 +107,27 @@ const Hero = () => {
       });
   };
 
+  // search input change
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
     setSearchButtonClicked(false);
   };
 
+  // category dropdown change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setSearchButtonClicked(false);
   };
-
+  console.log(formattedSearchContent);
   return (
     <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
       {/* display bar */}
-      <div className="w-full h-[250px] lg:h-[400px] xl:h-[600px] mx-auto overflow-y-scroll py-3 px-3 bg-white rounded-[20px] mb-4">
+      <div className="w-full h-[250px] lg:h-[350px] xl:h-[450px] mx-auto overflow-y-scroll py-3 px-3 bg-white rounded-[20px] mb-4 break-words">
         {/* display search data */}
         <h4 className="font-inter font-semibold text-base xl:text-lg text-blue4">
           Your Query : {searchQuery}
         </h4>
+        {/* if search button has pressed then only show loading and then data */}
         {searchButtonClicked ? (
           loading ? (
             <span className="text-blue7 font-inter font-normal text-sm xl:text-base">
@@ -87,19 +135,37 @@ const Hero = () => {
             </span>
           ) : !searchError ? (
             <div className="flex flex-col items-start">
+              {/* if response generated successfully */}
               <span className="font-inter font-semibold text-base xl:text-lg text-blue7 mt-2">
                 {answerGenerated && "Generated Answer"}
               </span>
+              {/* if we have our search result map it in a list */}
               <ul className="list-disc pl-4 mt-2">
                 {formattedSearchContent?.map((data, index) => (
                   <li
                     key={index}
                     className="font-medium font-inter text-sm xl:text-base text-blue4"
                   >
-                    {data}
+                    {data}.
                   </li>
                 ))}
               </ul>
+
+              {/* render the images */}
+              <div className="grid gird-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 w-full text-center md:text-start mt-2">
+                {serachImages?.map((imageLink, i) => (
+                  <div
+                    key={i}
+                    className="w-full bg-bgColor2 px-2 py-2 rounded-lg shadow-shadow2"
+                  >
+                    <img
+                      src={imageLink}
+                      alt="notFound"
+                      className="w-full h-32 object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <span className="font-inter font-semibold text-red-600 text-base">
