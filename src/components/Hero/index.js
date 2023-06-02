@@ -3,6 +3,7 @@ import Chevron from "../../images/chevronDownWhite.svg";
 import Search from "../../images/search.svg";
 import Mic from "../../images/mic.svg";
 import axios from "axios";
+import { currentUrl } from "../../ulConfig";
 
 const Hero = () => {
   // categories
@@ -27,19 +28,19 @@ const Hero = () => {
   const [serachImages, setSearchImages] = useState([]);
 
   // Recursive function to extract plain text from the result-content element
-  const getResultContentText = (element) => {
-    let text = "";
-    const childNodes = element.childNodes;
-    for (let i = 0; i < childNodes.length; i++) {
-      const node = childNodes[i];
-      if (node.nodeType === Node.TEXT_NODE) {
-        text += node.textContent;
-      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== "A") {
-        text += getResultContentText(node);
-      }
-    }
-    return text;
-  };
+  // const getResultContentText = (element) => {
+  //   let text = "";
+  //   const childNodes = element.childNodes;
+  //   for (let i = 0; i < childNodes.length; i++) {
+  //     const node = childNodes[i];
+  //     if (node.nodeType === Node.TEXT_NODE) {
+  //       text += node.textContent;
+  //     } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== "A") {
+  //       text += getResultContentText(node);
+  //     }
+  //   }
+  //   return text;
+  // };
 
   const extractTextAndLinks = (response) => {
     const regex = /(https?:\/\/[^\s]+)/g;
@@ -69,7 +70,7 @@ const Hero = () => {
     setSearchButtonClicked(true);
     axios
       .post(
-        `http://54.81.171.95:5010/query`,
+        currentUrl,
         {
           index_name: selectedCategory,
           query: searchQuery,
