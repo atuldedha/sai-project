@@ -1,13 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { KeyIcon, UserIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
+import { getLoginUrls } from "../urlConfig";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const navigate = useNavigate();
   const handleSignupNavigation = () => {
     navigate("/signup", { replace: true });
   };
+
+  const handleInputChange = (name, e) => {
+    setFormData({ ...formData, [name]: e.target.value });
+  };
+
+  const handleFormSubmit = () => {
+    console.log(getLoginUrls("login"));
+    axios
+      .post(getLoginUrls("loginUrl"), {
+        email: formData.email,
+        password: formData.password,
+      })
+      .then((res) => {
+        if (res?.data?.authToken) {
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="flex flex-col space-y-20 xl:space-y-0 xl:flex-row items-center">
       {/* image */}
@@ -41,6 +70,8 @@ const Login = () => {
             className="flex-grow outline-none border-none px-2 py-2 text-sm lg:text-base placeholder:text-xs font-inter font-normal text-black bg-transparent"
             placeholder="Email Address"
             type="email"
+            value={formData.email}
+            onChange={(e) => handleInputChange("email", e)}
           />
         </div>
 
@@ -51,11 +82,16 @@ const Login = () => {
             className="flex-grow outline-none border-none px-2 py-2 text-sm lg:text-base placeholder:text-xs font-inter font-normal text-black bg-transparent"
             placeholder="Password"
             type="password"
+            value={formData.password}
+            onChange={(e) => handleInputChange("password", e)}
           />
         </div>
 
         <div className="w-full flex items-center justify-center">
-          <button className="w-full px-2 py-2 mt-4 max-w-xl bg-blue5 text-white text-sm md:text-base xl:text-lg hover:bg-blue10 rounded-lg">
+          <button
+            className="w-full px-2 py-2 mt-4 max-w-xl bg-blue5 text-white text-sm md:text-base xl:text-lg hover:bg-blue10 rounded-lg"
+            onClick={handleFormSubmit}
+          >
             Log in
           </button>
         </div>

@@ -3,7 +3,7 @@ import Chevron from "../../images/chevronDownWhite.svg";
 import Search from "../../images/search.svg";
 import Mic from "../../images/mic.svg";
 import axios from "axios";
-import { currentUrl } from "../../ulConfig";
+import { currentUrl } from "../../urlConfig";
 
 const Hero = () => {
   // categories
@@ -88,7 +88,6 @@ const Hero = () => {
       })
       .then((html) => {
         const results = extractTextAndLinks(html?.search_results);
-        console.log(results?.text);
 
         setSearchImages(results?.links);
         setFormattedSearchContent(
@@ -119,7 +118,6 @@ const Hero = () => {
     setSelectedCategory(category);
     setSearchButtonClicked(false);
   };
-  console.log(formattedSearchContent);
   return (
     <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
       {/* display bar */}
