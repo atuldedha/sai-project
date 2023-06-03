@@ -21,7 +21,6 @@ const Login = () => {
   };
 
   const handleFormSubmit = () => {
-    console.log(getLoginUrls("login"));
     axios
       .post(getLoginUrls("loginUrl"), {
         email: formData.email,
