@@ -1,6 +1,6 @@
 {
   "name": "sai-project",
-  "homepage": "https://vaisage.com/",
+  "homepage": "http://vaisage.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
