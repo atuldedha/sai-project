@@ -3,7 +3,7 @@ import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { KeyIcon, UserIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
-import { getLoginUrls } from "../urlConfig";
+import { getURLs } from "../urlConfig";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const Login = () => {
 
   const handleFormSubmit = () => {
     axios
-      .post(getLoginUrls("loginUrl"), {
+      .post(getURLs("loginUrl"), {
         email: formData.email,
         password: formData.password,
       })

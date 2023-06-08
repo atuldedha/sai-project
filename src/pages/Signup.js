@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getLoginUrls } from "../urlConfig";
+import { getURLs } from "../urlConfig";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Signup = () => {
     }
 
     axios
-      .post(getLoginUrls("signupUrl"), {
+      .post(getURLs("signupUrl"), {
         ...formData,
       })
       .then((res) => {

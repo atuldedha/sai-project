@@ -1,16 +1,17 @@
 const devQueryUrl = `http://54.81.171.95:5010/query`;
 const prodQueryUrl = `https://api.brainjee.com/query`;
 
-const loginServer =
+const server =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
     ? `http://localhost:8080`
     : "https://server-gilt-mu.vercel.app";
 
 let currentUrl;
 
-const login = {
-  loginUrl: `${loginServer}/api/auth/login`,
-  signupUrl: `${loginServer}/api/auth/signup`,
+const URLs = {
+  loginUrl: `${server}/api/auth/login`,
+  signupUrl: `${server}/api/auth/signup`,
+  checkout: `${server}/api/checkout`,
 };
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -21,6 +22,6 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
   currentUrl = prodQueryUrl;
 }
 
-export const getLoginUrls = (urlName) => login[urlName];
+export const getURLs = (urlName) => URLs[urlName];
 
 export { currentUrl };
