@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getURLs } from "../urlConfig";
+import { UserContext } from "../context/user";
 
 const Signup = () => {
+  // user context to update
+  const { updateUser } = useContext(UserContext);
+  // navigate state
   const navigate = useNavigate();
+  // form data state
   const [formData, setFormData] = useState({
     username: "",
     firstName: "",
@@ -13,16 +18,20 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  // check password state
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // redirect to login oage
   const handleLoginNavigation = () => {
     navigate("/login", { replace: true });
   };
 
+  // handle input change
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // form submit handler
   const handleSubmit = () => {
     if (confirmPassword !== formData.password) {
       return alert("Passwords don't match");
@@ -34,6 +43,25 @@ const Signup = () => {
       })
       .then((res) => {
         if (res?.data?.authToken) {
+          // if auth token received get user detais
+          const axiosReq = axios.create({
+            headers: {
+              "auth-token": res?.data?.authToken,
+            },
+          });
+          axiosReq
+            .post(getURLs("getUserDetails"))
+            .then((response) => {
+              if (response?.data?.user) {
+                updateUser({
+                  ...response?.data?.user,
+                  authToken: res?.data?.authToken,
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           navigate("/");
         }
       })

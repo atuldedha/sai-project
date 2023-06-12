@@ -2,7 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import StripeContainer from "./components/StripeCheckout";
+import Checkout from "./pages/Checkout";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -18,7 +19,10 @@ function App() {
         <Route path="signup" element={<Signup />} />
 
         {/* payment page route */}
-        <Route path="checkout" element={<StripeContainer />} />
+        <Route path="checkout" element={<Checkout />} />
+
+        {/* payment page route */}
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
   );

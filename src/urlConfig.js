@@ -12,6 +12,11 @@ const URLs = {
   loginUrl: `${server}/api/auth/login`,
   signupUrl: `${server}/api/auth/signup`,
   checkout: `${server}/api/checkout`,
+  "stripe-checkout": `${server}/api/checkout/stripe-checkout`,
+  "paypal-checkout": `${server}/api/checkout/paypal-checkout`,
+  getUserDetails: `${server}/api/auth/getuser`,
+  "search-history": `${server}/api/search/get-search-history`,
+  "add-search": `${server}/api/search/add-search`,
 };
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

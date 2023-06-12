@@ -51,7 +51,7 @@ const PaymentForm = () => {
     if (!error) {
       try {
         const { id } = paymentMethod;
-        const response = await axios.post(getURLs("checkout"), {
+        const response = await axios.post(getURLs("stripe-checkout"), {
           amount: amount * 100,
           id,
         });

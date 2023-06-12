@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Logo from "../../images/logo.svg";
 import ShuttleImage from "../../images/shuttle.png";
 import MenuIcon from "../../images/menuIcon.svg";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/user";
 
 const Header = () => {
   const navigate = useNavigate();
+  const {
+    state: { userInfo },
+  } = useContext(UserContext);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -14,8 +18,11 @@ const Header = () => {
   };
 
   const handleNavigation = () => {
-    navigate("/login");
+    if (userInfo) {
+      navigate("/dashboard");
+    } else navigate("/login");
   };
+
   return (
     <div className="flex items-center px-4 lg:px-16 xl:px-64 py-6 justify-between bg-white">
       {/* logo */}
@@ -70,7 +77,9 @@ const Header = () => {
                 className="text-sm font-semibold font-inter text-white cursor-pointer"
                 onClick={handleNavigation}
               >
-                Log in
+                {Object.keys(userInfo)?.length
+                  ? userInfo?.firstName + (userInfo?.lastName || "")
+                  : "Log in"}
               </span>
             </div>
             <span className="text-sm font-inter text-white font-medium cursor-pointer">
@@ -116,7 +125,9 @@ const Header = () => {
           className="text-sm font-semibold font-inter text-blue2 cursor-pointer"
           onClick={handleNavigation}
         >
-          Log in
+          {Object.keys(userInfo)?.length
+            ? userInfo?.firstName + (userInfo?.lastName || "")
+            : "Log in"}
         </span>
         <button
           className="flex items-center py-3 px-8 rounded-[90px] font-raleway text-sm text-white font-bold cursor-pointer"

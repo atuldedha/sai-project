@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Chevron from "../../images/chevronDownWhite.svg";
 import Search from "../../images/search.svg";
 import Mic from "../../images/mic.svg";
 import axios from "axios";
-import { currentUrl } from "../../urlConfig";
+import { currentUrl, getURLs } from "../../urlConfig";
+import { UserContext } from "../../context/user";
 
 const Hero = () => {
+  // userinfo to check if user is logged in or not
+  const {
+    state: { userInfo },
+  } = useContext(UserContext);
   // categories
   const categories = ["Math", "Science", "Social", "English"];
   // open category dropdown state
@@ -99,6 +104,26 @@ const Hero = () => {
         setAnswerGenereated(true);
         setLoading(false);
         setSearchError(null);
+
+        // save users search history if he is logged in
+        if (userInfo) {
+          axios
+            .post(
+              getURLs("add-search"),
+              {
+                searchTerm: searchQuery,
+              },
+              {
+                headers: {
+                  "auth-token": userInfo?.authToken,
+                },
+              }
+            )
+            .then((res) => {})
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       })
       .catch((err) => {
         setAnswerGenereated(false);
@@ -118,6 +143,7 @@ const Hero = () => {
     setSelectedCategory(category);
     setSearchButtonClicked(false);
   };
+
   return (
     <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
       {/* display bar */}

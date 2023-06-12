@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { KeyIcon, UserIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { getURLs } from "../urlConfig";
+import { UserContext } from "../context/user";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const { updateUser } = useContext(UserContext);
 
   const navigate = useNavigate();
   const handleSignupNavigation = () => {
@@ -28,6 +30,24 @@ const Login = () => {
       })
       .then((res) => {
         if (res?.data?.authToken) {
+          const axiosReq = axios.create({
+            headers: {
+              "auth-token": res?.data?.authToken,
+            },
+          });
+          axiosReq
+            .post(getURLs("getUserDetails"))
+            .then((response) => {
+              if (response?.data?.user) {
+                updateUser({
+                  ...response?.data?.user,
+                  authToken: res?.data?.authToken,
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           navigate("/");
         }
       })
