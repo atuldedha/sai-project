@@ -78,7 +78,7 @@ const Header = () => {
                 onClick={handleNavigation}
               >
                 {Object.keys(userInfo)?.length
-                  ? userInfo?.firstName + (userInfo?.lastName || "")
+                  ? userInfo?.firstName + " " + (userInfo?.lastName || "")
                   : "Log in"}
               </span>
             </div>
@@ -126,7 +126,7 @@ const Header = () => {
           onClick={handleNavigation}
         >
           {Object.keys(userInfo)?.length
-            ? userInfo?.firstName + (userInfo?.lastName || "")
+            ? userInfo?.firstName + " " + (userInfo?.lastName || "")
             : "Log in"}
         </span>
         <button
