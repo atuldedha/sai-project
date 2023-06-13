@@ -17,6 +17,7 @@ const URLs = {
   getUserDetails: `${server}/api/auth/getuser`,
   "search-history": `${server}/api/search/get-search-history`,
   "add-search": `${server}/api/search/add-search`,
+  "refresh-user": `${server}/api/auth/refresh`,
 };
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

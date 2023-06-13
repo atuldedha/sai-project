@@ -24,10 +24,14 @@ const Login = () => {
 
   const handleFormSubmit = () => {
     axios
-      .post(getURLs("loginUrl"), {
-        email: formData.email,
-        password: formData.password,
-      })
+      .post(
+        getURLs("loginUrl"),
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         if (res?.data?.authToken) {
           const axiosReq = axios.create({
@@ -43,6 +47,7 @@ const Login = () => {
                   ...response?.data?.user,
                   authToken: res?.data?.authToken,
                 });
+                localStorage.setItem("persist", true);
               }
             })
             .catch((err) => {

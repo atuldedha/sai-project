@@ -4,11 +4,12 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <Routes>
-      <Route path="/">
+      <Route path="/" element={<Layout />}>
         {/* "/" will go to home page */}
         <Route index element={<Home />} />
 

@@ -38,9 +38,13 @@ const Signup = () => {
     }
 
     axios
-      .post(getURLs("signupUrl"), {
-        ...formData,
-      })
+      .post(
+        getURLs("signupUrl"),
+        {
+          ...formData,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         if (res?.data?.authToken) {
           // if auth token received get user detais
@@ -48,15 +52,17 @@ const Signup = () => {
             headers: {
               "auth-token": res?.data?.authToken,
             },
+            withCredentials: true,
           });
           axiosReq
-            .post(getURLs("getUserDetails"))
+            .post(getURLs("getUserDetails"), {}, { withCredentials: true })
             .then((response) => {
               if (response?.data?.user) {
                 updateUser({
                   ...response?.data?.user,
                   authToken: res?.data?.authToken,
                 });
+                localStorage.setItem("persist", true);
               }
             })
             .catch((err) => {

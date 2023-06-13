@@ -1,22 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Chevron from "../../images/chevronDownWhite.svg";
 import Search from "../../images/search.svg";
 import Mic from "../../images/mic.svg";
 import axios from "axios";
 import { currentUrl, getURLs } from "../../urlConfig";
 import { UserContext } from "../../context/user";
+import { useLocation } from "react-router-dom";
 
 const Hero = () => {
   // userinfo to check if user is logged in or not
   const {
     state: { userInfo },
   } = useContext(UserContext);
+
+  // capturing location for state
+  const location = useLocation();
+  const queryParameters = new URLSearchParams(location.search);
   // categories
   const categories = ["Math", "Science", "Social", "English"];
   // open category dropdown state
   const [showCategories, setShowCategories] = useState(false);
   // search query state
   const [searchQuery, setSearchQuery] = useState("");
+
   // selected category state
   const [selectedCategory, setSelectedCategory] = useState("Math");
   // loading state
@@ -112,6 +118,7 @@ const Hero = () => {
               getURLs("add-search"),
               {
                 searchTerm: searchQuery,
+                category: selectedCategory,
               },
               {
                 headers: {
@@ -143,6 +150,55 @@ const Hero = () => {
     setSelectedCategory(category);
     setSearchButtonClicked(false);
   };
+
+  // function to get query params and then auto search
+  useEffect(() => {
+    if (queryParameters?.get("query")?.length > 0) {
+      setLoading(true);
+      setSearchButtonClicked(true);
+      setSelectedCategory(queryParameters.get("category"));
+      setSearchQuery(queryParameters.get("query"));
+      axios
+        .post(
+          currentUrl,
+          {
+            index_name: queryParameters.get("category"),
+            query: queryParameters.get("query"),
+          },
+          {
+            headers: {
+              Accept: "text/html",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        )
+        .then((res) => {
+          // returning the html
+          return res?.data;
+        })
+        .then((html) => {
+          const results = extractTextAndLinks(html?.search_results);
+
+          setSearchImages(results?.links);
+          setFormattedSearchContent(
+            results?.text[0].charAt(results?.text[0].length - 1) === "."
+              ? results?.text[0]
+                  .slice(0, results?.text[0].length - 1)
+                  .split(".")
+              : results?.text[0].split(".")
+          );
+
+          setAnswerGenereated(true);
+          setLoading(false);
+          setSearchError(null);
+        });
+    } else {
+      setLoading(false);
+      setSearchButtonClicked(false);
+      setSelectedCategory("Math");
+      setSearchQuery("");
+    }
+  }, [location.search]);
 
   return (
     <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
@@ -257,6 +313,7 @@ const Hero = () => {
               onChange={(e) => handleInputChange(e)}
               placeholder="Ask me anything"
               className="flex-grow border-none outline-none text-sm lg:text-base placeholder:text-xs font-inter font-normal text-black bg-transparent"
+              disabled={loading}
             />
 
             {/* icons */}
@@ -265,7 +322,7 @@ const Hero = () => {
                 src={Search}
                 alt="search"
                 className="w-5 h-5 lg:w-8 lg:h-8 object-contain cursor-pointer"
-                onClick={search}
+                onClick={loading ? () => {} : search}
               />
 
               <div className="border-l-[1px] border-l-blue3 h-4" />
