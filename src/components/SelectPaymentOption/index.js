@@ -10,7 +10,7 @@ const SelectPaymentOption = ({
   handleChckboxClick,
 }) => {
   return (
-    <div className="max-w-xl w-full flex flex-col items-start space-y-4 px-2 py-8 lg:h-72">
+    <div className="max-w-xl w-full flex flex-col items-start space-y-4 px-2 py-8 h-64">
       <div className="flex items-center justify-between  w-full">
         {/* stripe selection */}
 
