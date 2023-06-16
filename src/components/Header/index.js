@@ -27,11 +27,11 @@ const Header = () => {
     <div className="flex items-center px-4 lg:px-16 xl:px-64 py-6 justify-between bg-white">
       {/* logo */}
 
-      <div className="flex items-center space-x-2">
+      <div
+        className="flex items-center space-x-2 cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <img src={Logo} alt="logo" className="h-7 lg:h-12 object-contain" />
-        {/* <h1 className="font-inter font-medium tracking-wide text-xl text-black uppercase">
-          Brainjee
-        </h1> */}
       </div>
 
       {/* mobile menu icon */}

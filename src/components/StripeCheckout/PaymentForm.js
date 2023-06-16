@@ -34,9 +34,8 @@ const CardOptions = {
   placeholder: "Card Details",
 };
 
-const PaymentForm = () => {
+const PaymentForm = ({ amount }) => {
   const [success, setSuccess] = useState(false);
-  const amount = 10;
 
   const stripe = useStripe();
   const elements = useElements();

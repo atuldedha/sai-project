@@ -3,7 +3,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { getURLs } from "../../urlConfig";
 
-const PaypalCheckout = () => {
+const PaypalCheckout = ({ amount }) => {
   const initialOptions = {
     "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
     currency: "USD",
@@ -15,7 +15,7 @@ const PaypalCheckout = () => {
   const createOrder = async (data) => {
     return axios
       .post(`${getURLs("paypal-checkout")}/create-order`, {
-        product: [{ description: "testing", price: 10 }],
+        product: [{ description: "testing", price: amount }],
       })
       .then((res) => {
         return res.json();
