@@ -7,7 +7,7 @@ import PhoneIcon from "../../images/phoneIcon.svg";
 
 const Footer = () => {
   return (
-    <div className="flex flex-col px-4 lg:px-16 xl:px-64 pb-8 lg:pb-32 bg-bgColor2">
+    <div className="flex flex-col px-4 lg:px-16 xl:px-64 pb-8 lg:pb-24 py-6 bg-bgColor2">
       {/* top */}
       <div className="flex justify-between mb-4 lg:mb-20">
         {/* left */}

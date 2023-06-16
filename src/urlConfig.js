@@ -18,6 +18,7 @@ const URLs = {
   "search-history": `${server}/api/search/get-search-history`,
   "add-search": `${server}/api/search/add-search`,
   "refresh-user": `${server}/api/auth/refresh`,
+  "subscription-amount": `${server}/api/checkout/getSubscriptionAmount`,
 };
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

@@ -74,17 +74,14 @@ const PaymentForm = () => {
   return (
     <div className="flex flex-col items-center">
       {!success ? (
-        <form
-          onSubmit={handleSubmit}
-          className="w-full px-4 py-5 rounded-lg max-w-2xl"
-        >
+        <form onSubmit={handleSubmit} className="w-full rounded-lg">
           <CardElement
             className="border border-blue8 py-4 px-2 rounded-lg"
             options={CardOptions}
           />
 
           <button
-            className="w-full px-10 py-4 mt-10 text-white text-base bg-blue5 rounded-lg"
+            className="w-full px-6 py-2 mt-10 text-white text-base bg-blue5 rounded-lg"
             type="submit"
             onClick={handleSubmit}
           >
