@@ -3,6 +3,7 @@ import axios from "axios";
 import { getURLs } from "../urlConfig";
 import { UserContext } from "../context/user";
 import SelectPaymentOption from "../components/SelectPaymentOption";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   // user state
@@ -11,8 +12,19 @@ const Checkout = () => {
     updateUser,
   } = useContext(UserContext);
 
+  // navigate state
+  const navigate = useNavigate();
+
+  // selected payment method state
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  // subscription amount state
   const [subscriptionAmount, setSubscriptionAmount] = useState();
+
+  // loading state
+  const [loading, setLoading] = useState(true);
+
+  // subscription api error state
+  const [amountError, setAmountError] = useState("");
 
   const handleChckboxClick = (e) => {
     if (e.target.name === "paypal" && e.target.checked) {
@@ -29,7 +41,12 @@ const Checkout = () => {
     // if previously logged in then auto login using refresh endpoint
     const isPersist = JSON.parse(localStorage.getItem("persist"));
 
+    if (!isPersist && !Object.keys(userInfo).length) {
+      return navigate("/login");
+    }
+
     if (!Object.keys(userInfo).length && isPersist) {
+      setLoading(true);
       axios
         .get(getURLs("refresh-user"), { withCredentials: true })
         .then((res) => {
@@ -45,18 +62,28 @@ const Checkout = () => {
                 withCredentials: true,
               })
               .then((res) => {
+                setLoading(false);
                 setSubscriptionAmount(res?.data?.amount);
               })
               .catch((err) => {
+                if (
+                  err?.response?.status === 400 ||
+                  err?.response?.status === 401 ||
+                  err?.response?.status === 500
+                )
+                  setAmountError(err?.response?.data?.message);
                 console.log(err);
+                setLoading(false);
               });
           }
+        })
+        .catch((err) => {
+          navigate("/login");
         });
     }
-  }, []);
 
-  useEffect(() => {
-    if (userInfo && !subscriptionAmount) {
+    if (Object.keys(userInfo).length > 0 && !subscriptionAmount) {
+      setLoading(true);
       axios
         .get(getURLs("subscription-amount"), {
           headers: {
@@ -66,8 +93,16 @@ const Checkout = () => {
         })
         .then((res) => {
           setSubscriptionAmount(res?.data?.amount);
+          setLoading(false);
         })
         .catch((err) => {
+          if (
+            err?.response?.status === 400 ||
+            err?.response?.status === 401 ||
+            err?.response?.status === 500
+          )
+            setAmountError(err?.response?.data?.message);
+          setLoading(false);
           console.log(err);
         });
     }
@@ -86,7 +121,11 @@ const Checkout = () => {
             Amount
           </span>
           <span className="font-inter font-semibold text-base md:text-lg">
-            ${subscriptionAmount}
+            {loading
+              ? "loading..."
+              : amountError
+              ? "Cannot fetch subscription amount"
+              : `$ ${subscriptionAmount}`}
           </span>
         </div>
       </div>

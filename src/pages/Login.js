@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { KeyIcon, UserIcon } from "@heroicons/react/24/solid";
@@ -7,22 +7,37 @@ import { getURLs } from "../urlConfig";
 import { UserContext } from "../context/user";
 
 const Login = () => {
+  // update user func. from context
+  const { updateUser } = useContext(UserContext);
+  // navigate state for navigation
+  const navigate = useNavigate();
+
+  // form data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { updateUser } = useContext(UserContext);
+  // error state
+  const [error, setError] = useState("");
 
-  const navigate = useNavigate();
+  // click handler to go to signup page
   const handleSignupNavigation = () => {
     navigate("/signup", { replace: true });
   };
 
+  // function to handle input changes
   const handleInputChange = (name, e) => {
     setFormData({ ...formData, [name]: e.target.value });
   };
 
+  // submit for handler func.
   const handleFormSubmit = () => {
+    if (!formData?.email) {
+      return setError("Email cannot be empty");
+    }
+    if (!formData?.password) {
+      return setError("Password cannot be empty");
+    }
     axios
       .post(
         getURLs("loginUrl"),
@@ -51,15 +66,32 @@ const Login = () => {
               }
             })
             .catch((err) => {
-              console.log(err);
+              if (
+                err?.response?.status === 400 ||
+                err?.response?.status === 401 ||
+                err?.response?.status === 500
+              )
+                setError(err?.response?.data?.message);
+
+              if (err) console.log(err);
             });
           navigate("/");
         }
       })
       .catch((err) => {
+        if (
+          err?.response?.status === 400 ||
+          err?.response?.status === 401 ||
+          err?.response?.status === 500
+        )
+          setError(err?.response?.data?.message);
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    setError("");
+  }, [formData]);
 
   return (
     <div className="flex flex-col space-y-20 xl:space-y-0 xl:flex-row items-center">
@@ -111,6 +143,11 @@ const Login = () => {
           />
         </div>
 
+        {error?.length > 0 && (
+          <span className="text-xs sm:text-sm font-inter text-red-500 font-medium mt-2 block">
+            {error}
+          </span>
+        )}
         <div className="w-full flex items-center justify-center">
           <button
             className="w-full px-2 py-2 mt-4 max-w-xl bg-blue5 text-white text-sm md:text-base xl:text-lg hover:bg-blue10 rounded-lg"

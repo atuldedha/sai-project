@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +21,9 @@ const Signup = () => {
   // check password state
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // error state
+  const [error, setError] = useState("");
+
   // redirect to login oage
   const handleLoginNavigation = () => {
     navigate("/login", { replace: true });
@@ -33,8 +36,24 @@ const Signup = () => {
 
   // form submit handler
   const handleSubmit = () => {
+    if (!formData?.username) {
+      return setError("Username field cannot be empty");
+    }
+
+    if (!formData?.email) {
+      return setError("Email field cannot be empty");
+    }
+
+    if (!formData?.firstName) {
+      return setError("First name field cannot be empty");
+    }
+
+    if (!formData.password) {
+      return setError("Password field cannot be empty");
+    }
+
     if (confirmPassword !== formData.password) {
-      return alert("Passwords don't match");
+      return setError("Passwords don't match");
     }
 
     axios
@@ -66,13 +85,31 @@ const Signup = () => {
               }
             })
             .catch((err) => {
+              if (
+                err?.response?.status === 400 ||
+                err?.response?.status === 401 ||
+                err?.response?.status === 500
+              )
+                setError(err?.response?.data?.message);
               console.log(err);
             });
           navigate("/");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (
+          err?.response?.status === 400 ||
+          err?.response?.status === 401 ||
+          err?.response?.status === 500
+        )
+          setError(err?.response?.data?.message);
+        console.log(err);
+      });
   };
+
+  useEffect(() => {
+    setError("");
+  }, [formData]);
 
   return (
     <div className="flex flex-col space-y-20 xl:space-y-0 xl:flex-row items-center">
@@ -183,6 +220,12 @@ const Signup = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
+
+        {error?.length > 0 && (
+          <span className="text-xs sm:text-sm font-inter text-red-500 font-medium mt-2 block">
+            {error}
+          </span>
+        )}
 
         <div className="w-full flex items-center justify-center">
           <button
