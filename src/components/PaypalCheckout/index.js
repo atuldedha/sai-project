@@ -81,6 +81,7 @@ const Buttons = ({ setShowModal, amount }) => {
       ) : (
         <PayPalButtons
           className="max-w-2xl w-full"
+          fundingSource="paypal"
           createOrder={(data, actions) => createOrder(data, actions)}
           onApprove={onApprove}
         />
