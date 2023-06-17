@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
 import Layout from "./components/Layout";
+import Acknowledgement from "./pages/Acknowledgement";
 
 function App() {
   return (
@@ -22,8 +23,11 @@ function App() {
         {/* payment page route */}
         <Route path="checkout" element={<Checkout />} />
 
-        {/* payment page route */}
+        {/* dashboard page route */}
         <Route path="dashboard" element={<Dashboard />} />
+
+        {/* acknowledgement page route */}
+        <Route path="acknowledge" element={<Acknowledgement />} />
       </Route>
     </Routes>
   );

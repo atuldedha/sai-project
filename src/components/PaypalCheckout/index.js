@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { getURLs } from "../../urlConfig";
+import { useNavigate } from "react-router-dom";
 
 const PaypalCheckout = ({ amount }) => {
+  const navigate = useNavigate();
   const initialOptions = {
     "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
     currency: "USD",
     intent: "capture",
   };
-
-  const [orderId, setOrderId] = useState();
 
   const createOrder = async (data) => {
     return axios
@@ -18,11 +18,7 @@ const PaypalCheckout = ({ amount }) => {
         product: [{ description: "testing", price: amount }],
       })
       .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setOrderId(data?.orderID);
-        return data?.orderID;
+        return res?.data?.order?.id;
       })
       .catch((err) => {
         console.log(err);
@@ -36,7 +32,8 @@ const PaypalCheckout = ({ amount }) => {
         orderID: data?.orderID,
       })
       .then((res) => {
-        res.json();
+        // res.json();
+        if (res.status === 200) navigate("/acknowledge", { replace: true });
       })
       .catch((err) => {
         console.log(err);
