@@ -19,6 +19,8 @@ const URLs = {
   "add-search": `${server}/api/search/add-search`,
   "refresh-user": `${server}/api/auth/refresh`,
   "subscription-amount": `${server}/api/checkout/get-subscription-amount`,
+  "searches-left": `${server}/api/free/get-free-searches`,
+  "set-searches": `${server}/api/free/set-free-searches`,
 };
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

@@ -1,36 +1,11 @@
-import { useContext, useEffect } from "react";
+import React from "react";
 import CoursesSection from "../components/CoursesSection";
 import Hero from "../components/Hero";
 import ReviewSection from "../components/ReviewSection";
 import SpecificationSection from "../components/SpecificationSection";
 import SubjectSection from "../components/SubjectSection";
-import axios from "axios";
-import { getURLs } from "../urlConfig";
-import { UserContext } from "../context/user";
 
 function Home() {
-  // update user state
-  const {
-    state: { userInfo },
-    updateUser,
-  } = useContext(UserContext);
-
-  // check if user has previously logged in or not
-  useEffect(() => {
-    // if previously logged in then auto login using refresh endpoint
-    const isPersist = JSON.parse(localStorage.getItem("persist"));
-
-    if (!Object.keys(userInfo).length && isPersist) {
-      axios
-        .get(getURLs("refresh-user"), { withCredentials: true })
-        .then((res) => {
-          if (res?.data) {
-            const { foundUser } = res.data.user;
-            updateUser({ ...foundUser, authToken: res.data.user.authToken });
-          }
-        });
-    }
-  }, []);
   return (
     <div className="bg-bgColor2">
       <div className="bg-bgColor1 rounded-bl-curveRadius rounded-br-curveRadius">
