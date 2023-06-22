@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import Chevron from "../../images/chevronDownWhite.svg";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Search from "../../images/search.svg";
 import Mic from "../../images/mic.svg";
 import axios from "axios";
 import { currentUrl, getURLs } from "../../urlConfig";
 import { UserContext } from "../../context/user";
 import { useLocation } from "react-router-dom";
+import TrialOverModel from "../../modal/TrialOverModel";
 
 const Hero = () => {
   // userinfo to check if user is logged in or not
@@ -13,22 +13,19 @@ const Hero = () => {
     state: { userInfo },
   } = useContext(UserContext);
 
+  // ref for component mount
+  const effectRan = useRef(false);
+
   // capturing location for state
   const location = useLocation();
-  const queryParameters = new URLSearchParams(location.search);
-  // categories
-  const categories = ["Math", "Science", "Social", "English"];
-  // open category dropdown state
-  const [showCategories, setShowCategories] = useState(false);
+  const queryParameters = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search]
+  );
   // search query state
   const [searchQuery, setSearchQuery] = useState("");
-
-  // selected category state
-  const [selectedCategory, setSelectedCategory] = useState("Math");
   // loading state
   const [loading, setLoading] = useState(false);
-  // clicked on search button or form submit state
-  const [searchButtonClicked, setSearchButtonClicked] = useState(false);
   // search error state
   const [searchError, setSearchError] = useState(null);
   // api response cam state
@@ -37,6 +34,12 @@ const Hero = () => {
   const [formattedSearchContent, setFormattedSearchContent] = useState([]);
   // image link state
   const [serachImages, setSearchImages] = useState([]);
+
+  // free searches left state
+  const [freeSearchesLeft, setFreeSearchesLeft] = useState(null);
+
+  // modal open state
+  const [openTrialOverModal, setOpenTrialOverModal] = useState(false);
 
   // Recursive function to extract plain text from the result-content element
   // const getResultContentText = (element) => {
@@ -77,48 +80,58 @@ const Hero = () => {
   // handke search
   const search = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setSearchButtonClicked(true);
-    axios
-      .post(
-        currentUrl,
-        {
-          index_name: selectedCategory,
-          query: searchQuery,
-        },
-        {
-          headers: {
-            Accept: "text/html",
-            "Content-Type": "application/x-www-form-urlencoded",
+
+    if (freeSearchesLeft === 0) {
+      setSearchError({
+        message:
+          "Your free trial has been exhausted, Please subscribe to continue searching...",
+      });
+      setLoading(false);
+      setOpenTrialOverModal(true);
+      return;
+    }
+
+    if (Object.keys(userInfo).length > 0) {
+      setLoading(true);
+      axios
+        .post(
+          currentUrl,
+          {
+            query: searchQuery,
           },
-        }
-      )
-      .then((res) => {
-        // returning the html
-        return res?.data;
-      })
-      .then((html) => {
-        const results = extractTextAndLinks(html?.search_results);
+          {
+            headers: {
+              Accept: "text/html",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        )
+        .then((res) => {
+          // returning the html
+          return res?.data;
+        })
+        .then((html) => {
+          const results = extractTextAndLinks(html?.search_results);
 
-        setSearchImages(results?.links);
-        setFormattedSearchContent(
-          results?.text[0].charAt(results?.text[0].length - 1) === "."
-            ? results?.text[0].slice(0, results?.text[0].length - 1).split(".")
-            : results?.text[0].split(".")
-        );
+          setSearchImages(results?.links);
+          setFormattedSearchContent(
+            results?.text[0].charAt(results?.text[0].length - 1) === "."
+              ? results?.text[0]
+                  .slice(0, results?.text[0].length - 1)
+                  .split(".")
+              : results?.text[0].split(".")
+          );
 
-        setAnswerGenereated(true);
-        setLoading(false);
-        setSearchError(null);
+          setAnswerGenereated(true);
+          setLoading(false);
+          setSearchError(null);
 
-        // save users search history if he is logged in
-        if (userInfo) {
+          // save users search history if he is logged in
           axios
             .post(
               getURLs("add-search"),
               {
                 searchTerm: searchQuery,
-                category: selectedCategory,
               },
               {
                 headers: {
@@ -130,39 +143,68 @@ const Hero = () => {
             .catch((err) => {
               console.log(err);
             });
-        }
-      })
-      .catch((err) => {
-        setAnswerGenereated(false);
-        setSearchError(err);
-        setLoading(false);
-      });
+
+          axios
+            .put(
+              getURLs("set-searches"),
+              {},
+              { headers: { "auth-token": userInfo?.authToken } }
+            )
+            .then((res) => {
+              setFreeSearchesLeft(res?.data?.freeSearchesLeft);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          setAnswerGenereated(false);
+          setSearchError(err);
+          setLoading(false);
+        });
+    } else {
+      setSearchError({ message: "You are not logged in, Please login first." });
+    }
   };
 
   // search input change
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
-    setSearchButtonClicked(false);
   };
 
-  // category dropdown change
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    setSearchButtonClicked(false);
-  };
+  useEffect(() => {
+    if (Object.keys(userInfo).length > 0 && effectRan.current) {
+      axios
+        .get(getURLs("searches-left"), {
+          headers: {
+            "auth-token": userInfo?.authToken,
+          },
+        })
+        .then((res) => {
+          setFreeSearchesLeft(res?.data?.freeSearchesLeft);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return () => {
+      effectRan.current = true;
+    };
+  }, [userInfo]);
 
   // function to get query params and then auto search
   useEffect(() => {
-    if (queryParameters?.get("query")?.length > 0) {
+    if (
+      queryParameters?.get("query")?.length > 0 &&
+      Object.keys(userInfo).length > 0 &&
+      effectRan.current
+    ) {
       setLoading(true);
-      setSearchButtonClicked(true);
-      setSelectedCategory(queryParameters.get("category"));
       setSearchQuery(queryParameters.get("query"));
       axios
         .post(
           currentUrl,
           {
-            index_name: queryParameters.get("category"),
             query: queryParameters.get("query"),
           },
           {
@@ -191,26 +233,37 @@ const Hero = () => {
           setAnswerGenereated(true);
           setLoading(false);
           setSearchError(null);
+
+          // axios
+          //   .put(
+          //     getURLs("set-searches"),
+          //     {},
+          //     { headers: { "auth-token": userInfo?.authToken } }
+          //   )
+          //   .then((res) => {
+          //     setFreeSearchesLeft(res?.data?.freeSearchesLeft);
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
         });
     } else {
       setLoading(false);
-      setSearchButtonClicked(false);
-      setSelectedCategory("Math");
       setSearchQuery("");
     }
-  }, [location.search]);
+  }, [queryParameters, userInfo]);
 
   return (
-    <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
-      {/* display bar */}
-      <div className="w-full h-[250px] lg:h-[350px] xl:h-[450px] mx-auto overflow-y-scroll py-3 px-3 bg-white rounded-[20px] mb-4 break-words">
-        {/* display search data */}
-        <h4 className="font-inter font-semibold text-base xl:text-lg text-blue4">
-          Your Query : {searchQuery}
-        </h4>
-        {/* if search button has pressed then only show loading and then data */}
-        {searchButtonClicked ? (
-          loading ? (
+    <>
+      <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
+        {/* display bar */}
+        <div className="w-full h-[250px] lg:h-[350px] xl:h-[450px] mx-auto overflow-y-scroll py-3 px-3 bg-white rounded-[20px] mb-4 break-words">
+          {/* display search data */}
+          <h4 className="font-inter font-semibold text-base xl:text-lg text-blue4">
+            Your Query : {searchQuery}
+          </h4>
+          {/* if search button has pressed then only show loading and then data */}
+          {loading ? (
             <span className="text-blue7 font-inter font-normal text-sm xl:text-base">
               Please wait loading your query...
             </span>
@@ -252,23 +305,20 @@ const Hero = () => {
             <span className="font-inter font-semibold text-red-600 text-base">
               {searchError?.message}
             </span>
-          )
-        ) : (
-          ""
-        )}
-      </div>
+          )}
+        </div>
 
-      {/* search bar */}
-      <div className="w-full relative mx-auto rounded-xl py-3 px-4 space-x-2">
-        {/* blur backgrund */}
-        <div
-          className="absolute top-0 bottom-0 left-0 right-0 bg-white opacity-50 z-[0] rounded-lg"
-          style={{ background: "" }}
-        />
         {/* search bar */}
-        <div className="z-10 relative flex flex-col-reverse lg:flex-row lg:items-center justify-between lg:space-x-4 px-1 py-1 lg:px-2 lg:py-3 lg:bg-white rounded-lg">
-          {/* button */}
+        <div className="w-full relative mx-auto rounded-xl py-3 px-4 space-x-2">
+          {/* blur backgrund */}
           <div
+            className="absolute top-0 bottom-0 left-0 right-0 bg-white opacity-50 z-[0] rounded-lg"
+            style={{ background: "" }}
+          />
+          {/* search bar */}
+          <div className="z-10 relative flex flex-col-reverse lg:flex-row lg:items-center justify-between lg:space-x-4 px-1 py-1 lg:px-2 lg:py-3 lg:bg-white rounded-lg">
+            {/* button */}
+            {/* <div
             className="relative flex items-center justify-between py-3 px-4 font-raleway font-bold text-sm lg:text-base text-white rounded-lg w-32 mt-2 lg:mt-0 cursor-pointer"
             style={{
               background:
@@ -300,43 +350,47 @@ const Hero = () => {
                 ))}
               </div>
             )}
+          </div> */}
+
+            <form
+              onSubmit={search}
+              className="flex items-center flex-grow bg-white py-2 px-4 rounded-lg lg:py-0 lg:px-0 space-x-2"
+            >
+              {/* input */}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleInputChange(e)}
+                placeholder="Ask me anything"
+                className="flex-grow border-none outline-none text-sm lg:text-base placeholder:text-xs font-inter font-normal text-black bg-transparent"
+                disabled={loading}
+              />
+
+              {/* icons */}
+              <div className="flex items-center space-x-2 h-full">
+                <img
+                  src={Search}
+                  alt="search"
+                  className="w-5 h-5 lg:w-8 lg:h-8 object-contain cursor-pointer"
+                  onClick={loading ? () => {} : search}
+                />
+
+                <div className="border-l-[1px] border-l-blue3 h-4" />
+
+                <img
+                  src={Mic}
+                  alt="mic"
+                  className="w-5 h-5 lg:w-8 lg:h-8 object-contain cursor-pointer"
+                />
+              </div>
+            </form>
           </div>
-
-          <form
-            onSubmit={search}
-            className="flex items-center flex-grow bg-white py-2 px-4 rounded-lg lg:py-0 lg:px-0 space-x-2"
-          >
-            {/* input */}
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => handleInputChange(e)}
-              placeholder="Ask me anything"
-              className="flex-grow border-none outline-none text-sm lg:text-base placeholder:text-xs font-inter font-normal text-black bg-transparent"
-              disabled={loading}
-            />
-
-            {/* icons */}
-            <div className="flex items-center space-x-2 h-full">
-              <img
-                src={Search}
-                alt="search"
-                className="w-5 h-5 lg:w-8 lg:h-8 object-contain cursor-pointer"
-                onClick={loading ? () => {} : search}
-              />
-
-              <div className="border-l-[1px] border-l-blue3 h-4" />
-
-              <img
-                src={Mic}
-                alt="mic"
-                className="w-5 h-5 lg:w-8 lg:h-8 object-contain cursor-pointer"
-              />
-            </div>
-          </form>
         </div>
       </div>
-    </div>
+      {openTrialOverModal && (
+        <TrialOverModel handleClosePopup={() => setOpenTrialOverModal(false)} />
+      )}
+    </>
   );
 };
 

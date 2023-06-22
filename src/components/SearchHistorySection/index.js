@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getURLs } from "../../urlConfig";
 import { useNavigate } from "react-router-dom";
 
@@ -7,30 +7,38 @@ const SearchHistorySection = ({ userInfo }) => {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
 
+  // state to prevent useeffect run twice
+  const effectRan = useRef(false);
+
   const handleSearch = (searchParam) => {
     const queryParams = new URLSearchParams();
-    queryParams.set("query", searchParam?.searchTerm);
-    queryParams.set("category", searchParam?.category);
+    queryParams.set("query", searchParam);
     navigate(`/?${queryParams.toString()}`, { replace: true });
   };
 
   useEffect(() => {
-    const searchHistoryReq = axios.create({
-      headers: {
-        "auth-token": userInfo?.authToken,
-      },
-    });
-
-    searchHistoryReq
-      .get(getURLs("search-history"), {
-        userid: userInfo?._id,
-      })
-      .then((res) => {
-        setHistory(res?.data?.userInfo?.searchItem);
-      })
-      .catch((err) => {
-        console.log(err);
+    if (effectRan?.current) {
+      const searchHistoryReq = axios.create({
+        headers: {
+          "auth-token": userInfo?.authToken,
+        },
       });
+
+      searchHistoryReq
+        .get(getURLs("search-history"), {
+          userid: userInfo?._id,
+        })
+        .then((res) => {
+          setHistory(res?.data?.userInfo?.searchItem);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    // cleanup func. makes effect ran true because useeffect run twice and for the first time when unmount we set to true then when again comes to mount it will be true
+    return () => {
+      effectRan.current = true;
+    };
   }, [userInfo?.authToken, userInfo?._id]);
 
   return (
@@ -47,7 +55,7 @@ const SearchHistorySection = ({ userInfo }) => {
               className="list-item text-blue7 text-sm md:text-base xl:text-lg  font-inter font-medium cursor-pointer underline"
               onClick={() => handleSearch(data)}
             >
-              {data?.searchTerm}
+              {data}
             </span>
           ))
         ) : (

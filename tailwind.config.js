@@ -32,6 +32,7 @@ module.exports = {
         gray1: "#333333",
         gray2: "#4D5569",
         gray3: "#8987A1",
+        stripeColor: "#6772e5",
       },
       backgroundColor: {
         grayBg: "rgba(15, 78, 168, 0.06)",

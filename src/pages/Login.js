@@ -8,7 +8,10 @@ import { UserContext } from "../context/user";
 
 const Login = () => {
   // update user func. from context
-  const { updateUser } = useContext(UserContext);
+  const {
+    state: { userInfo },
+    updateUser,
+  } = useContext(UserContext);
   // navigate state for navigation
   const navigate = useNavigate();
 
@@ -92,6 +95,12 @@ const Login = () => {
   useEffect(() => {
     setError("");
   }, [formData]);
+
+  useEffect(() => {
+    if (Object.keys(userInfo).length) {
+      navigate("/");
+    }
+  }, [userInfo]);
 
   return (
     <div className="flex flex-col space-y-20 xl:space-y-0 xl:flex-row items-center">
