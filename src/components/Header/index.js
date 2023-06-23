@@ -18,7 +18,7 @@ const Header = () => {
   };
 
   const handleNavigation = () => {
-    if (userInfo) {
+    if (Object.keys(userInfo).length) {
       navigate("/dashboard");
     } else navigate("/login");
   };

@@ -38,13 +38,13 @@ const SubjectCard = ({
           />
         </div>
 
-        <span className="text-black1 font-montserrat font-medium text-xs lg:text-[14px]">
+        <span className="text-black1 font-montserrat font-medium text-xs lg:text-[12px]">
           {noOfCourses} Courses
         </span>
 
         <div className="h-3 border-l border-l-blue3" />
 
-        <span className="text-blue5 font-montserrat font-medium text-xs lg:text-[14px]">
+        <span className="text-blue5 font-montserrat font-medium text-xs lg:text-[12px]">
           {courseDuration}
         </span>
       </div>

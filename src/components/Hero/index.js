@@ -6,6 +6,7 @@ import { currentUrl, getURLs } from "../../urlConfig";
 import { UserContext } from "../../context/user";
 import { useLocation } from "react-router-dom";
 import TrialOverModel from "../../modal/TrialOverModel";
+import "./Hero.css";
 
 const Hero = () => {
   // userinfo to check if user is logged in or not
@@ -257,55 +258,57 @@ const Hero = () => {
     <>
       <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
         {/* display bar */}
-        <div className="w-full h-[250px] lg:h-[350px] xl:h-[450px] mx-auto overflow-y-scroll py-3 px-3 bg-white rounded-[20px] mb-4 break-words">
-          {/* display search data */}
-          <h4 className="font-inter font-semibold text-base xl:text-lg text-blue4">
-            Your Query : {searchQuery}
-          </h4>
-          {/* if search button has pressed then only show loading and then data */}
-          {loading ? (
-            <span className="text-blue7 font-inter font-normal text-sm xl:text-base">
-              Please wait loading your query...
-            </span>
-          ) : !searchError ? (
-            <div className="flex flex-col items-start">
-              {/* if response generated successfully */}
-              <span className="font-inter font-semibold text-base xl:text-lg text-blue7 mt-2">
-                {answerGenerated && "Generated Answer"}
+        <div className="w-full h-[250px] lg:h-[350px] xl:h-[450px] mx-auto py-3 px-3 bg-white rounded-[20px] mb-4">
+          <div className="container h-full w-full overflow-y-auto break-words text-justify px-8">
+            {/* display search data */}
+            <h4 className="font-inter font-semibold text-base xl:text-lg text-blue4">
+              Your Query : {searchQuery}
+            </h4>
+            {/* if search button has pressed then only show loading and then data */}
+            {loading ? (
+              <span className="text-blue7 font-inter font-normal text-sm xl:text-base">
+                Please wait loading your query...
               </span>
-              {/* if we have our search result map it in a list */}
-              <ul className="list-disc pl-4 mt-2">
-                {formattedSearchContent?.map((data, index) => (
-                  <li
-                    key={index}
-                    className="font-medium font-inter text-sm xl:text-base text-blue4"
-                  >
-                    {data}.
-                  </li>
-                ))}
-              </ul>
+            ) : !searchError ? (
+              <div className="flex flex-col items-start">
+                {/* if response generated successfully */}
+                <span className="font-inter font-semibold text-base xl:text-lg text-blue7 mt-2">
+                  {answerGenerated && "Generated Answer"}
+                </span>
+                {/* if we have our search result map it in a list */}
+                <ul className="list-disc pl-4 mt-2">
+                  {formattedSearchContent?.map((data, index) => (
+                    <li
+                      key={index}
+                      className="font-medium font-inter text-sm xl:text-base text-blue4"
+                    >
+                      {data}.
+                    </li>
+                  ))}
+                </ul>
 
-              {/* render the images */}
-              <div className="grid gird-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 w-full text-center md:text-start mt-2">
-                {serachImages?.map((imageLink, i) => (
-                  <div
-                    key={i}
-                    className="w-full bg-bgColor2 px-2 py-2 rounded-lg shadow-shadow2"
-                  >
-                    <img
-                      src={imageLink}
-                      alt="notFound"
-                      className="w-full h-32 object-contain"
-                    />
-                  </div>
-                ))}
+                {/* render the images */}
+                <div className="grid gird-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 w-full text-center md:text-start mt-2">
+                  {serachImages?.map((imageLink, i) => (
+                    <div
+                      key={i}
+                      className="w-full bg-bgColor2 px-2 py-2 rounded-lg shadow-shadow2"
+                    >
+                      <img
+                        src={imageLink}
+                        alt="notFound"
+                        className="w-full h-32 object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <span className="font-inter font-semibold text-red-600 text-base">
-              {searchError?.message}
-            </span>
-          )}
+            ) : (
+              <span className="font-inter font-semibold text-red-600 text-base">
+                {searchError?.message}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* search bar */}
