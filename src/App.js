@@ -50,6 +50,7 @@ function App() {
           content="Brainjee - An innovative online learning
             platform offering wide range of courses. Designed to make learning impactful."
         />
+        <link rel="icon" href="/logo512.png" />
         <link rel="canonical" href="https://www.vaisage.com/" />
       </Helmet>
 
