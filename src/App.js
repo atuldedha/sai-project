@@ -41,69 +41,27 @@ function App() {
     }
   }, []);
   return (
-    <>
-      {/* seo */}
-      <Helmet>
-        <title>BrainJEE</title>
-        <meta
-          name="description"
-          content="An innovative online learning
-            platform offering wide range of courses. Designed to make learning impactful."
-        />
-        <link rel="icon" href="/logo512.png" />
-        <link rel="canonical" href="https://www.vaisage.com/" />
-        {/* Twitter meta tags below */}
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content="" />
-        <meta
-          name="twitter:title"
-          content="Brainjee - An innovative online learning
-          platform offering wide range of courses."
-        />
-        <meta
-          name="twitter:description"
-          content="An innovative online learning
-          platform offering wide range of courses. Designed to make learning impactful."
-        />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* "/" will go to home page */}
+        <Route index element={<Home />} />
 
-        {/* Facebook meta tags below */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://vaisage.com/" />
-        <meta
-          property="og:title"
-          content="Brainjee - An innovative online learning
-          platform offering wide range of courses."
-        />
-        <meta
-          property="og:description"
-          content="An innovative online learning
-          platform offering wide range of courses. Designed to make learning impactful."
-        />
-        <meta property="og:image" content="" />
-      </Helmet>
+        {/* login page route */}
+        <Route path="login" element={<Login />} />
 
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* "/" will go to home page */}
-          <Route index element={<Home />} />
+        {/* signup page route */}
+        <Route path="signup" element={<Signup />} />
 
-          {/* login page route */}
-          <Route path="login" element={<Login />} />
+        {/* payment page route */}
+        <Route path="checkout" element={<Checkout />} />
 
-          {/* signup page route */}
-          <Route path="signup" element={<Signup />} />
+        {/* dashboard page route */}
+        <Route path="dashboard" element={<Dashboard />} />
 
-          {/* payment page route */}
-          <Route path="checkout" element={<Checkout />} />
-
-          {/* dashboard page route */}
-          <Route path="dashboard" element={<Dashboard />} />
-
-          {/* acknowledgement page route */}
-          <Route path="acknowledge" element={<Acknowledgement />} />
-        </Route>
-      </Routes>
-    </>
+        {/* acknowledgement page route */}
+        <Route path="acknowledge" element={<Acknowledgement />} />
+      </Route>
+    </Routes>
   );
 }
 
