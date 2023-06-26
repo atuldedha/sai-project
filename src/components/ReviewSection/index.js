@@ -29,10 +29,10 @@ const ReviewSection = () => {
         Clients say
       </span>
 
-      <h1 className="font-inter font-semibold text-xl lg:text-2xl xl:text-4xl text-center text-blue4 mb-10">
+      <h4 className="font-inter font-semibold text-xl lg:text-2xl xl:text-4xl text-center text-blue4 mb-10">
         Clophi is your Azure Resource Center with hundreds of readily{" "}
         <span className="text-blue7">deployable Azure Resources</span>
-      </h1>
+      </h4>
 
       {/* review cards */}
       {/* dummy data */}

@@ -5,9 +5,9 @@ import CourseCard from "./CourseCard/CourseCard";
 const CoursesSection = () => {
   return (
     <div className="flex flex-col px-4 lg:px-16 xl:px-64 items-center">
-      <h1 className="text-xl lg:text-2xl xl:text-4xl text-blue4 font-inter font-semibold mb-10">
+      <h2 className="text-xl lg:text-2xl xl:text-4xl text-blue4 font-inter font-semibold mb-10">
         Courses
-      </h1>
+      </h2>
 
       {/* course cards */}
       {/* dummy data */}

@@ -4,45 +4,58 @@ import Hero from "../components/Hero";
 import ReviewSection from "../components/ReviewSection";
 import SpecificationSection from "../components/SpecificationSection";
 import SubjectSection from "../components/SubjectSection";
+import { Helmet } from "react-helmet-async";
 
 function Home() {
   return (
-    <div className="bg-bgColor2">
-      <div className="bg-bgColor1 rounded-bl-curveRadius rounded-br-curveRadius">
-        {/* header section */}
-        {/* <section>
+    <>
+      <Helmet>
+        <title>BrainJEE</title>
+        <meta
+          name="description"
+          content="Brainjee - An innovative online learning
+            platform offering wide range of courses. Designed to make learning impactful."
+        />
+        <link rel="canonical" href="https://www.vaisage.com/" />
+      </Helmet>
+
+      <div className="bg-bgColor2">
+        <div className="bg-bgColor1 rounded-bl-curveRadius rounded-br-curveRadius">
+          {/* header section */}
+          {/* <section>
           <Header />
         </section> */}
 
-        {/* hero section */}
-        <section className="mb-8 lg:mb-32">
-          <Hero />
+          {/* hero section */}
+          <section className="mb-8 lg:mb-32">
+            <Hero />
+          </section>
+
+          {/* hero section */}
+          <section className="mb-32">
+            <SubjectSection subjectTitle="Science" />
+          </section>
+
+          {/* review section */}
+          <section className="mb-8 lg:mb-32">
+            <ReviewSection />
+          </section>
+
+          {/* courses section */}
+          <section className="lg:mb-20 pb-20 mb-4">
+            <CoursesSection />
+          </section>
+        </div>
+        {/* why choose us section */}
+        <section className="pb-8 lg:pb-32">
+          <SpecificationSection />
         </section>
 
-        {/* hero section */}
-        <section className="mb-32">
-          <SubjectSection subjectTitle="Science" />
-        </section>
-
-        {/* review section */}
-        <section className="mb-8 lg:mb-32">
-          <ReviewSection />
-        </section>
-
-        {/* courses section */}
-        <section className="lg:mb-20 pb-20 mb-4">
-          <CoursesSection />
-        </section>
-      </div>
-      {/* why choose us section */}
-      <section className="pb-8 lg:pb-32">
-        <SpecificationSection />
-      </section>
-
-      {/* <footer className="pb-8 lg:pb-32">
+        {/* <footer className="pb-8 lg:pb-32">
         <Footer />
       </footer> */}
-    </div>
+      </div>
+    </>
   );
 }
 

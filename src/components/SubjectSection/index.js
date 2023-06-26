@@ -19,9 +19,9 @@ const SubjectSection = ({ subjectTitle }) => {
   return (
     <div className="flex flex-col items-center px-4 lg:px-16 xl:px-64 relative">
       {/* sub title can be passed through props */}
-      <h1 className="font-bold font-inter text-xl lg:text-2xl xl:text-4xl text-blue4 mb-4">
+      <h2 className="font-bold font-inter text-xl lg:text-2xl xl:text-4xl text-blue4 mb-4">
         {subjectTitle}
-      </h1>
+      </h2>
 
       {/* subject suggested courses card */}
       {/* dummy data */}

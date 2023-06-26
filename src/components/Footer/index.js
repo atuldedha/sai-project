@@ -18,9 +18,9 @@ const Footer = () => {
             className="w-28 lg:w-32 object-contain mb-5"
           />
 
-          <span className="font-poppins font-semibold text-sm text-blue4 block mb-2">
-            About Brainjee
-          </span>
+          <p className="flex items-center font-poppins font-semibold text-sm text-blue4 mb-2">
+            About <h1 className="ml-2">Brainjee</h1>
+          </p>
           <p className="font-poppins font-normal text-sm text-gray3 text-center lg:text-start black mb-4 lg:mb-10">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry.
