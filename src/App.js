@@ -10,6 +10,7 @@ import { useContext, useEffect, useRef } from "react";
 import { UserContext } from "./context/user";
 import axios from "axios";
 import { getURLs } from "./urlConfig";
+import { Helmet } from "react-helmet-async";
 
 function App() {
   // update user state
@@ -40,27 +41,40 @@ function App() {
     }
   }, []);
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        {/* "/" will go to home page */}
-        <Route index element={<Home />} />
+    <>
+      {/* seo */}
+      <Helmet>
+        <title>BrainJEE</title>
+        <meta
+          name="description"
+          content="Brainjee - An innovative online learning
+            platform offering wide range of courses. Designed to make learning impactful."
+        />
+        <link rel="canonical" href="https://www.vaisage.com/" />
+      </Helmet>
 
-        {/* login page route */}
-        <Route path="login" element={<Login />} />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* "/" will go to home page */}
+          <Route index element={<Home />} />
 
-        {/* signup page route */}
-        <Route path="signup" element={<Signup />} />
+          {/* login page route */}
+          <Route path="login" element={<Login />} />
 
-        {/* payment page route */}
-        <Route path="checkout" element={<Checkout />} />
+          {/* signup page route */}
+          <Route path="signup" element={<Signup />} />
 
-        {/* dashboard page route */}
-        <Route path="dashboard" element={<Dashboard />} />
+          {/* payment page route */}
+          <Route path="checkout" element={<Checkout />} />
 
-        {/* acknowledgement page route */}
-        <Route path="acknowledge" element={<Acknowledgement />} />
-      </Route>
-    </Routes>
+          {/* dashboard page route */}
+          <Route path="dashboard" element={<Dashboard />} />
+
+          {/* acknowledgement page route */}
+          <Route path="acknowledge" element={<Acknowledgement />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
