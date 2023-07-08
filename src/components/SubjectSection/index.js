@@ -1,10 +1,15 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import SubjectCard from "./SubjectCard/SubjectCard";
-import subjectData from "./staticData";
 import ChevronLeft from "../../images/chevronLeftBlack.svg";
 import ChevronRight from "../../images/chevronRightBlack.svg";
+import { AppDataContext } from "../../context/appData";
 
 const SubjectSection = ({ subjectTitle }) => {
+  // app info context
+  const {
+    state: { appData },
+  } = useContext(AppDataContext);
+
   const cardsContainerRef = useRef();
   const handleScrolllLeft = () => {
     cardsContainerRef.current.scrollLeft -=
@@ -29,12 +34,12 @@ const SubjectSection = ({ subjectTitle }) => {
         className="w-full h-full grid grid-cols-5 gap-4 overflow-x-scroll transition-all duration-100 ease-in-out translate-x-2 scrollbar-thin scrollbar-track-gray-400/20 scrollbar-thumb-blue-300/80 scrollbar-none"
         ref={cardsContainerRef}
       >
-        {subjectData?.map((data) => (
+        {appData?.subjectSectionData?.map((data, index) => (
           <SubjectCard
-            key={data.key}
-            courseImage={data.image}
-            courseDetail={data.courseDetail}
-            coursePrice={data.coursePrice}
+            key={index}
+            courseImage={data?.courseImage}
+            courseDetail={data.courseName}
+            coursePrice={data.courseType}
             noOfCourses={data.noOfCourses}
             courseDuration={data.courseDuration}
           />

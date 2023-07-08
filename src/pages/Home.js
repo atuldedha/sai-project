@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import CoursesSection from "../components/CoursesSection";
 import Hero from "../components/Hero";
 import ReviewSection from "../components/ReviewSection";
 import SpecificationSection from "../components/SpecificationSection";
 import SubjectSection from "../components/SubjectSection";
 import { Helmet } from "react-helmet-async";
+import axios from "axios";
+import { getURLs } from "../urlConfig";
+import { AppDataContext } from "../context/appData";
 
 function Home() {
+  const { initializeAppData } = useContext(AppDataContext);
+
+  useEffect(() => {
+    axios
+      .get(getURLs("appInfo"))
+      .then((res) => {
+        // console.log(res?.data?.applicationData);
+        initializeAppData(res?.data?.applicationData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       {/* seo */}
       <Helmet>
-        <title>BrainJEE</title>
+        <title>Brainjee</title>
         <meta
           name="description"
           content="An innovative online learning
@@ -51,11 +68,6 @@ function Home() {
 
       <div className="bg-bgColor2">
         <div className="bg-bgColor1 rounded-bl-curveRadius rounded-br-curveRadius">
-          {/* header section */}
-          {/* <section>
-          <Header />
-        </section> */}
-
           {/* hero section */}
           <section className="mb-8 lg:mb-32">
             <Hero />
@@ -80,10 +92,6 @@ function Home() {
         <section className="pb-8 lg:pb-32">
           <SpecificationSection />
         </section>
-
-        {/* <footer className="pb-8 lg:pb-32">
-        <Footer />
-      </footer> */}
       </div>
     </>
   );

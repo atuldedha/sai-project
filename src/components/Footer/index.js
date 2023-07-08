@@ -1,90 +1,56 @@
-import React from "react";
-import Logo from "../../images/logo.svg";
+import React, { useContext } from "react";
 import MailIcon from "../../images/mailIcon.svg";
 import PlayStoreLogo from "../../images/playStoreLogo.svg";
 import AppStoreLogo from "../../images/appStoreLogo.svg";
 import PhoneIcon from "../../images/phoneIcon.svg";
+import { AppDataContext } from "../../context/appData";
 
 const Footer = () => {
+  const {
+    state: { appData },
+  } = useContext(AppDataContext);
   return (
     <div className="flex flex-col px-4 lg:px-16 xl:px-64 pb-8 lg:pb-24 py-6 bg-bgColor2">
       {/* top */}
       <div className="flex justify-between mb-4 lg:mb-20">
         {/* left */}
         <div className="flex flex-col items-center lg:items-start w-full lg:w-1/4">
-          <img
-            src={Logo}
-            alt="logo"
-            className="w-28 lg:w-32 object-contain mb-5"
-          />
+          {Object.keys(appData).length ? (
+            <img
+              src={appData?.logoUrl}
+              alt="logo"
+              className="w-28 lg:w-32 object-contain mb-5 bg-inherit"
+            />
+          ) : (
+            <span>Loading...</span>
+          )}
 
-          <p className="flex items-center font-poppins font-semibold text-sm text-blue4 mb-2">
-            About <h1 className="ml-2">Brainjee</h1>
-          </p>
+          <span className="font-poppins font-semibold text-sm text-blue4 block mb-2">
+            About Brainjee
+          </span>
           <p className="font-poppins font-normal text-sm text-gray3 text-center lg:text-start black mb-4 lg:mb-10">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {appData?.footerSectionData?.aboutText}
           </p>
         </div>
 
         {/* middle */}
         <div className="hidden lg:flex items-start space-x-8 w-1/2 justify-center">
-          {/* 1 row */}
-          <div className="flex flex-col space-y-4">
-            <span className="font-inter font-semibold text-sm text-blue4 block">
-              Company
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Home
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              About us
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Growers
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Merchant
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Contact
-            </span>
-          </div>
-
-          {/* 2 row */}
-          <div className="flex flex-col space-y-4">
-            <span className="font-inter font-semibold text-sm text-blue4 block">
-              Community
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Facebook
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Linkedin
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Instagram
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Twitter
-            </span>
-          </div>
-
-          {/* 3 row */}
-          <div className="flex flex-col space-y-4">
-            <span className="font-inter font-semibold text-sm text-blue4 block">
-              Help
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Facebook
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Linkedin
-            </span>
-            <span className="font-poppins font-normal text-xs text-blue11 block">
-              Instagram
-            </span>
-          </div>
+          {/*rows */}
+          {appData?.footerSectionData?.linksData?.map((link, index) => (
+            <div className="flex flex-col space-y-4" key={index}>
+              <span className="font-inter font-semibold text-sm text-blue4 block">
+                {link.heading}
+              </span>
+              {link?.data?.map((value, i) => (
+                <span
+                  key={i}
+                  className="font-poppins font-normal text-xs text-blue11 block"
+                >
+                  {value}
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
 
         {/* right */}
@@ -135,12 +101,12 @@ const Footer = () => {
       </div>
 
       {/* bottom */}
-      <div className="flex flex-col space-y-8 lg:space-0 lg:flex-row justify-between items-center">
+      <div className="flex flex-col space-y-8 lg:space-y-0 lg:flex-row justify-between items-center lg:items-start">
         {/* left */}
-        <div className="flex space-x-2 items-center lg:w-1/4">
+        <div className="flex space-x-2 items-center lg:w-[33%] xl:w-[30%]">
           <img src={MailIcon} alt="mail" className="" />
           <span className="font-inter font-medium text-blue11 opacity-60 text-xs lg:text-sm">
-            contact@lift.agency
+            {appData?.footerSectionData?.companyMail}
           </span>
         </div>
 
@@ -148,14 +114,14 @@ const Footer = () => {
         <div className="flex items-center space-x-2 lg:w-1/2 lg:px-14">
           <img src={PhoneIcon} alt="phone" className="" />
           <span className="underline underline-offset-8 font-inter font-medium text-blue11 text-xs lg:text-sm">
-            (123) 456-7890
+            {appData?.footerSectionData?.companyPhone}
           </span>
         </div>
 
         {/* right */}
         <div className="flex items-center lg:w-1/4">
           <span className="font-inter font-medium text-blue11 opacity-60 text-xs lg:text-sm">
-            © 2023 Web Design All rights reserved.
+            {appData?.footerSectionData?.companyCopyrightText}
           </span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 const devQueryUrl = `http://54.81.171.95:5010/query`;
-const prodQueryUrl = `https://api.brainjee.com/query`;
+const prodQueryUrl = `https://api.vaisage.com/query`;
 
 const server =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
@@ -9,6 +9,7 @@ const server =
 let currentUrl;
 
 const URLs = {
+  appInfo: `${server}/api/appData/appInfo`,
   loginUrl: `${server}/api/auth/login`,
   signupUrl: `${server}/api/auth/signup`,
   checkout: `${server}/api/checkout`,

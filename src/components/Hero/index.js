@@ -7,8 +7,15 @@ import { UserContext } from "../../context/user";
 import { useLocation } from "react-router-dom";
 import TrialOverModel from "../../modal/TrialOverModel";
 import "./Hero.css";
+import { AppDataContext } from "../../context/appData";
+import HeroBG from "../../images/heroBg.png";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 const Hero = () => {
+  // app data context
+  const {
+    state: { appData },
+  } = useContext(AppDataContext);
   // userinfo to check if user is logged in or not
   const {
     state: { userInfo },
@@ -256,14 +263,20 @@ const Hero = () => {
 
   return (
     <>
-      <div className="h-full bg-blue-700 py-10 px-4 lg:px-16 xl:px-64">
+      <div
+        className="h-full py-10 px-4 lg:px-16 xl:px-64 relative rounded-b-3xl"
+        style={{
+          backgroundImage: `url(${HeroBG})`,
+        }}
+      >
         {/* display bar */}
         <div className="w-full h-[250px] lg:h-[350px] xl:h-[450px] mx-auto py-3 px-3 bg-white rounded-[20px] mb-4">
-          <div className="container h-full w-full overflow-y-auto break-words text-justify px-8">
+          <div className="container h-full w-full overflow-y-auto break-words text-justify px-2 md:px-4 xl:px-8">
             {/* display search data */}
-            <h4 className="font-inter font-semibold text-base xl:text-lg text-blue4">
-              Your Query : {searchQuery}
-            </h4>
+            <div className="flex items-center space-x-2 font-inter font-semibold text-base xl:text-lg text-blue4">
+              <UserCircleIcon className="h-9 text-gray1" />{" "}
+              <span>: {searchQuery}</span>
+            </div>
             {/* if search button has pressed then only show loading and then data */}
             {loading ? (
               <span className="text-blue7 font-inter font-normal text-sm xl:text-base">
@@ -271,6 +284,14 @@ const Hero = () => {
               </span>
             ) : !searchError ? (
               <div className="flex flex-col items-start">
+                {/* logo */}
+                {answerGenerated && (
+                  <img
+                    src={appData?.logoUrl}
+                    alt="logo"
+                    className="h-14 lg:h-16 object-cover"
+                  />
+                )}
                 {/* if response generated successfully */}
                 <span className="font-inter font-semibold text-base xl:text-lg text-blue7 mt-2">
                   {answerGenerated && "Generated Answer"}
@@ -364,7 +385,7 @@ const Hero = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => handleInputChange(e)}
-                placeholder="Ask me anything"
+                placeholder={appData?.searchBarPlaceholderText}
                 className="flex-grow border-none outline-none text-sm lg:text-base placeholder:text-xs font-inter font-normal text-black bg-transparent"
                 disabled={loading}
               />

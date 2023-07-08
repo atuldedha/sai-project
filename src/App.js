@@ -10,7 +10,6 @@ import { useContext, useEffect, useRef } from "react";
 import { UserContext } from "./context/user";
 import axios from "axios";
 import { getURLs } from "./urlConfig";
-import { Helmet } from "react-helmet-async";
 
 function App() {
   // update user state

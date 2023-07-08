@@ -1,12 +1,18 @@
 import React, { useContext, useState } from "react";
-import Logo from "../../images/logo.svg";
 import ShuttleImage from "../../images/shuttle.png";
 import MenuIcon from "../../images/menuIcon.svg";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/user";
+import { AppDataContext } from "../../context/appData";
 
 const Header = () => {
   const navigate = useNavigate();
+  // app data context
+  const {
+    state: { appData },
+  } = useContext(AppDataContext);
+
+  // user data context
   const {
     state: { userInfo },
   } = useContext(UserContext);
@@ -24,14 +30,22 @@ const Header = () => {
   };
 
   return (
-    <div className="flex items-center px-4 lg:px-16 xl:px-64 py-6 justify-between bg-white">
+    <div className="flex items-center px-4 lg:px-16 xl:px-64 py-3 justify-between bg-white">
       {/* logo */}
 
       <div
         className="flex items-center space-x-2 cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <img src={Logo} alt="logo" className="h-7 lg:h-12 object-contain" />
+        {Object.keys(appData).length ? (
+          <img
+            src={appData?.logoUrl}
+            alt="logo"
+            className="w-44 h-14 lg:h-16 object-contain"
+          />
+        ) : (
+          <span>Loading...</span>
+        )}
       </div>
 
       {/* mobile menu icon */}
@@ -74,7 +88,7 @@ const Header = () => {
                 Get Started
               </button>
               <span
-                className="text-sm font-semibold font-inter text-white cursor-pointer"
+                className="text-sm font-semibold font-inter text-white cursor-pointer whitespace-nowrap truncate max-w-xs"
                 onClick={handleNavigation}
               >
                 {Object.keys(userInfo)?.length
@@ -82,47 +96,33 @@ const Header = () => {
                   : "Log in"}
               </span>
             </div>
-            <span className="text-sm font-inter text-white font-medium cursor-pointer">
-              Key
-            </span>
-            <span className="text-sm font-inter text-white font-medium cursor-pointer">
-              Documentation
-            </span>
-            <span className="text-sm font-inter text-white font-medium cursor-pointer">
-              Features
-            </span>
-            <span className="text-sm font-inter text-white font-medium cursor-pointer">
-              Pricing
-            </span>
-            <span className="text-sm font-inter text-white font-medium cursor-pointer">
-              Contact us
-            </span>
+            {appData?.headerNavValues?.map((nav, index) => (
+              <span
+                key={index}
+                className="text-sm font-inter text-white font-medium cursor-pointer"
+              >
+                {nav?.text}
+              </span>
+            ))}
           </div>
         </>
       )}
       {/* middle nav tabs */}
-      <div className="hidden lg:flex items-center space-x-6">
-        <span className="text-sm font-inter text-blue1 font-medium cursor-pointer">
-          Key
-        </span>
-        <span className="text-sm font-inter text-blue1 font-medium cursor-pointer">
-          Documentation
-        </span>
-        <span className="text-sm font-inter text-blue1 font-medium cursor-pointer">
-          Features
-        </span>
-        <span className="text-sm font-inter text-blue1 font-medium cursor-pointer">
-          Pricing
-        </span>
-        <span className="text-sm font-inter text-blue1 font-medium cursor-pointer">
-          Contact us
-        </span>
+      <div className="hidden lg:flex items-center justify-center space-x-6 flex-grow">
+        {appData?.headerNavValues?.map((nav, index) => (
+          <span
+            key={index}
+            className="text-sm font-inter text-blue1 font-medium cursor-pointer whitespace-nowrap truncate max-w-xs"
+          >
+            {nav?.text}
+          </span>
+        ))}
       </div>
 
       {/* join button */}
       <div className="hidden lg:flex items-center space-x-4">
         <span
-          className="text-sm font-semibold font-inter text-blue2 cursor-pointer"
+          className="text-sm font-semibold font-inter text-blue2 cursor-pointer whitespace-nowrap truncate max-w-[70px]"
           onClick={handleNavigation}
         >
           {Object.keys(userInfo)?.length
